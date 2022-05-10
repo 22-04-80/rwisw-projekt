@@ -37,6 +37,7 @@ export class App extends React.Component<AppProps, AppState> {
       return (<DetailsView
         searchResult={selectedSearchResult}
         onSelectResult={this.setSelectedSearchResult}
+        apiKey={apiKey}
       />)
     }
 

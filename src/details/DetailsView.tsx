@@ -9,17 +9,19 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {Recommendations} from './Recommendations';
 
 interface DetailsViewProps {
     searchResult: any; // TODO
     onSelectResult: any;
+    apiKey: string;
 }
 
 const theme = createTheme();
 
 export class DetailsView extends React.Component<DetailsViewProps, {}> {
     public render() {
-        const {searchResult, onSelectResult} = this.props;
+        const {searchResult, onSelectResult, apiKey} = this.props;
 
         console.log(searchResult)
 
@@ -42,33 +44,36 @@ export class DetailsView extends React.Component<DetailsViewProps, {}> {
                     }}
                 >
                     <Container maxWidth="sm">
-                    <Typography
-                        component="h1"
-                        variant="h2"
-                        align="center"
-                        color="text.primary"
-                        gutterBottom
-                    >
-                        {searchResult?.result?.name}
-                    </Typography>
-                    <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                        {searchResult?.result?.description}
-                    </Typography>
-                    <Stack direction="row" spacing={1}>
-                        <Typography variant="h6" align="left" color="text.secondary" paragraph>
-                            Type: {searchResult?.result["@type"].join(", ")}
+                        <Typography
+                            component="h1"
+                            variant="h2"
+                            align="center"
+                            color="text.primary"
+                            gutterBottom
+                        >
+                            {searchResult?.result?.name}
                         </Typography>
-                        <Chip label={`Score: ${Number(searchResult?.resultScore).toFixed(2)}`} color="primary"></Chip>
-                    </Stack>
-                    <Typography>
-                        {searchResult?.result?.detailedDescription?.articleBody}
-                    </Typography>
-                    {searchResult?.result?.url && (
-                        <Link href={searchResult.result.url}>See more</Link>
-                    )}
-                    <Typography variant="caption" display="block" gutterBottom color="text.secondary">
-                        License: {searchResult?.result?.detailedDescription?.license}
-                    </Typography>
+                        <Typography variant="h5" align="center" color="text.secondary" paragraph>
+                            {searchResult?.result?.description}
+                        </Typography>
+                        <Stack direction="row" spacing={1}>
+                            <Typography variant="h6" align="left" color="text.secondary" paragraph>
+                                Type: {searchResult?.result["@type"].join(", ")}
+                            </Typography>
+                            <Chip label={`Score: ${Number(searchResult?.resultScore).toFixed(2)}`} color="primary"></Chip>
+                        </Stack>
+                        <Typography>
+                            {searchResult?.result?.detailedDescription?.articleBody}
+                        </Typography>
+                        {searchResult?.result?.url && (
+                            <Link href={searchResult.result.url}>See more</Link>
+                        )}
+                        <Typography variant="caption" display="block" gutterBottom color="text.secondary">
+                            License: {searchResult?.result?.detailedDescription?.license}
+                        </Typography>
+                    </Container>
+                    <Container>
+                        <Recommendations key={searchResult.result["@id"]} onSelectResult={onSelectResult} apiKey={apiKey} selectedResult={searchResult} />
                     </Container>
                 </Box>
                 </main>
