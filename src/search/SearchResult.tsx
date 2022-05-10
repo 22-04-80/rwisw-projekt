@@ -8,11 +8,12 @@ import Typography from '@mui/material/Typography';
 
 interface SearchResultProps {
     searchResult: any; // TODO
+    onSelectResult: Function;
 }
 
 export class SearchResult extends React.Component<SearchResultProps, {}> {
     render () {
-        const {searchResult} = this.props;
+        const {searchResult, onSelectResult} = this.props;
         console.log({searchResult})
         return searchResult && (
         <Grid item xs={12} sm={6} md={4}>
@@ -31,7 +32,7 @@ export class SearchResult extends React.Component<SearchResultProps, {}> {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small">View</Button>
+                <Button size="small" type="button" onClick={() => onSelectResult(searchResult)}>View</Button>
               </CardActions>
             </Card>
         </Grid>

@@ -11,12 +11,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { SearchResult } from './SearchResult';
 import { KnowledgeGraph } from '../knowledgeGraph/KnowledgeGraph';
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
 const theme = createTheme();
 
 interface SearchViewProps {
   apiKey: string;
+  onSelectResult: Function;
 }
 
 interface SearchViewState {
@@ -55,6 +54,7 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
   }
 
   public render () {
+      const {onSelectResult} = this.props;
       const {query, loading, searchResults} = this.state;
       console.log({searchResults})
 
@@ -62,7 +62,6 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <main>
-              {/* Hero unit */}
               <Box
                 sx={{
                   bgcolor: 'background.paper',
@@ -98,9 +97,14 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
                 </Container>
               </Box>
               <Container sx={{ py: 8 }} maxWidth="md">
-                {/* End hero unit */}
                 <Grid container spacing={4}>
-                  {searchResults.map((searchResult) => <SearchResult key={searchResult.result["@id"]} searchResult={searchResult} />)}
+                  {searchResults.map((searchResult) => (
+                    <SearchResult
+                      key={searchResult.result["@id"]}
+                      searchResult={searchResult}
+                      onSelectResult={onSelectResult}
+                    />
+                  ))}
                 </Grid>
               </Container>
             </main>
