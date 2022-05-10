@@ -23,6 +23,7 @@ export class App extends React.Component<AppProps, AppState> {
 
   public render() {
     const {apiKey} = this.state;
+
     return apiKey
       ? (
         <SearchView apiKey={apiKey} />

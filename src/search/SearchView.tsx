@@ -6,8 +6,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import LinearProgress from '@mui/material/LinearProgress';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { SearchResult } from './SearchResult';
+import { KnowledgeGraph } from '../knowledgeGraph/KnowledgeGraph';
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -19,13 +21,19 @@ interface SearchViewProps {
 
 interface SearchViewState {
   query: string;
+  searchResults: any[]; // TODO
+  loading: boolean;
 }
 
 export class SearchView extends React.Component<SearchViewProps, SearchViewState> {
+  protected kg: KnowledgeGraph;
+
   constructor(props: SearchViewProps) {
     super(props);
 
-    this.state = {query: ""};
+    this.state = {query: "", searchResults: [], loading: false};
+
+    this.kg = new KnowledgeGraph(props.apiKey);
   }
 
   protected onQueryChange = (event: any): void => {
@@ -34,9 +42,21 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
     });
   }
 
+  protected onPerformSearch = async (): Promise<void> => {
+    const {query} = this.state;
+
+    this.setState({searchResults: [], loading: true})
+
+    const response = await this.kg.search(query);
+    const responseJson = await response.json();
+    console.log(responseJson);
+
+    this.setState({searchResults: responseJson.itemListElement, loading: false})
+  }
+
   public render () {
-      const {apiKey} = this.props;
-      const {query} = this.state;
+      const {query, loading, searchResults} = this.state;
+      console.log({searchResults})
 
       return (
           <ThemeProvider theme={theme}>
@@ -69,16 +89,18 @@ export class SearchView extends React.Component<SearchViewProps, SearchViewState
                     fullWidth
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
-                    onClick={() => console.log(query)}
+                    onClick={this.onPerformSearch}
+                    disabled={loading}
                   >
                     Search
                   </Button>
+                  {loading && (<LinearProgress />)}
                 </Container>
               </Box>
               <Container sx={{ py: 8 }} maxWidth="md">
                 {/* End hero unit */}
                 <Grid container spacing={4}>
-                  {cards.map((searchResult) => <SearchResult key={searchResult} searchResult={searchResult} />)}
+                  {searchResults.map((searchResult) => <SearchResult key={searchResult.result["@id"]} searchResult={searchResult} />)}
                 </Grid>
               </Container>
             </main>
