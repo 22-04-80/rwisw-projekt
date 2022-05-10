@@ -67,7 +67,7 @@ export class AuthenticationView extends React.Component<AuthenticationViewProps,
                 <Grid container>
                   <Grid item>
                     <Link href="https://console.developers.google.com/" variant="body2">
-                      {"Don't have an account? Set up one in your Google Account"}
+                      {"Don't have an API key? Set up one in your Google Account"}
                     </Link>
                   </Grid>
                 </Grid>

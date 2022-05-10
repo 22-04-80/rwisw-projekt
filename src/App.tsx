@@ -1,5 +1,6 @@
 import React from 'react';
-import {AuthenticationView} from "./AuthenticationView";
+import {AuthenticationView} from "./authentication/AuthenticationView";
+import {SearchView} from './search/SearchView';
 
 interface AppProps {}
 
@@ -24,7 +25,7 @@ export class App extends React.Component<AppProps, AppState> {
     const {apiKey} = this.state;
     return apiKey
       ? (
-        <div>{apiKey}</div>
+        <SearchView apiKey={apiKey} />
       )
       : (
         <AuthenticationView onStart={this.setUpApiKey}/>
